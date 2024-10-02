@@ -30,6 +30,7 @@ import EditDialog from 'jrgcomponents/EditDialog';
 import useSWR from 'swr';
 import axios from 'axios';
 import Gravatar from './Gravatar';
+import { UserDropDown } from './Setting/Menu';
 
 export type FormProps = {
   fieldOverrides?: { [key: string]: ReactNode };
@@ -214,7 +215,7 @@ const Interactive = (props: Overrides & UIProps): React.JSX.Element => {
                       {selectionBars['conversation']}
                     </Box>
                   ) : undefined)}
-                <Tooltip title='Menu'>
+                {/* <Tooltip title='Menu'>
                   <IconButton
                     onClick={(event) => {
                       setAnchorEl(event.currentTarget);
@@ -222,7 +223,8 @@ const Interactive = (props: Overrides & UIProps): React.JSX.Element => {
                   >
                     {user?.email ? <Gravatar email={user?.email} sx={{ width: '2rem', height: '2rem' }} /> : <Menu />}
                   </IconButton>
-                </Tooltip>
+                </Tooltip> */}
+                <UserDropDown user={user} />
                 <Popover
                   open={Boolean(anchorEl)}
                   anchorEl={anchorEl}
