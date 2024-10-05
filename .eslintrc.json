@@ -84,7 +84,7 @@
     "@typescript-eslint/no-namespace": "warn", // Disallow the use of custom TypeScript modules and namespaces.
     "@typescript-eslint/no-unused-expressions": "warn", // Disallow unused expressions.
     "@typescript-eslint/no-var-requires": "warn", // Disallow the use of `require` statements except in import statements.
-    "curly": ["warn", "all"], // Require consistent brace style for all control statements.
+    "curly": ["off"], // Require consistent brace style for all control statements.
     "eqeqeq": ["warn", "always"], // Enforce the use of === and !== over == and !=.
     "eslint-comments/no-unused-disable": "warn", // Disallow unused eslint-disable comments.
     "import/newline-after-import": "warn", // Enforce a newline after import statements.

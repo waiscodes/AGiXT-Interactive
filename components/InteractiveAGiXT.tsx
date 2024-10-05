@@ -372,4 +372,5 @@ const InteractiveAGiXT = ({
     <Interactive {...uiConfigWithEnv} {...overrides} />
   );
 };
+
 export default InteractiveAGiXT;
