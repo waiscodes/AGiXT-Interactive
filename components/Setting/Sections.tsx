@@ -1,5 +1,5 @@
 'use client';
-import { getCookie, setCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import axios from 'axios';
 import DynamicForm from 'jrgcomponents/DynamicForm';
 import useSWR from 'swr';
@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
 
 export const General = () => {
   const {
@@ -60,7 +61,7 @@ export const General = () => {
 };
 
 // Move to JRGComponents
-export const Appearance = ({ themes = ['light', 'dark', 'colorblind', 'colorblind-dark'] }: { themes: string[] }) => {
+export const Appearance = ({ themes = ['light', 'dark', 'colorblind', 'colorblind-dark'] }: { themes?: string[] }) => {
   const handleThemeUpdate = async (theme: string) => {
     document.body.classList.remove(...themes);
     document.body.classList.add(theme);
@@ -105,17 +106,65 @@ export const Appearance = ({ themes = ['light', 'dark', 'colorblind', 'colorblin
   );
 };
 
-export const Extensions = () => {
+export const Overrides = () => {
   const showOverrideSwitches = process.env.NEXT_PUBLIC_AGIXT_SHOW_OVERRIDE_SWITCHES || '';
+  const overrides = showOverrideSwitches.split(',');
+
+  const labelName = (name: string) => {
+    const labels: Record<string, string> = {
+      tts: 'Text-to-Speech',
+      websearch: 'Websearch',
+      'create-image': 'Generate an Image',
+    };
+    return labels[name.toString()] || name; // toString() to prevent object sync injection security issue
+  };
+
+  const getInitialState = (override: string): string => {
+    const cookie = getCookie('agixt-' + override);
+    if (cookie === undefined) return 'Default';
+    return cookie === 'true' ? 'Always' : 'Never';
+  };
+
+  const handleStateChange = (override: string, value: string) => {
+    const cookieKey = 'agixt-' + override;
+    if (value === 'Default') {
+      deleteCookie(cookieKey, { domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN });
+    } else {
+      setCookie(cookieKey, value === 'Always', {
+        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+        maxAge: 2147483647,
+      });
+    }
+  };
+
   return (
-    <div>
-      {showOverrideSwitches.split(',').includes('tts') && <OverrideSwitch name='tts' label='Text-to-Speech' />}
-      {showOverrideSwitches.split(',').includes('websearch') && <OverrideSwitch name='websearch' label='Websearch' />}
+    <div className='flex flex-col gap-4'>
+      {overrides.map((override: string) => {
+        const initialState = getInitialState(override);
+
+        return (
+          <div key={override} className='flex flex-col gap-2'>
+            <Label>{labelName(override)}</Label>
+            <Select onValueChange={(value) => handleStateChange(override, value)}>
+              <SelectTrigger>
+                <SelectValue placeholder={initialState ?? labelName(override)} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value='Default'>Default</SelectItem>
+                  <SelectItem value='Never'>Never</SelectItem>
+                  <SelectItem value='Always'>Always</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        );
+      })}
     </div>
   );
 };
 
-export const DataControls = () => {
+export const Extensions = () => {
   return <div>Data controls</div>;
 };
 

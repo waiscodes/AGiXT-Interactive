@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
-import { General, Appearance, Extensions, DataControls, BuilderProfile, ConnectedApps, Security } from './Sections';
+import { General, Appearance, Overrides, Extensions, ConnectedApps, Security } from './Sections';
 
 type UserSettings = {
   user: any;
@@ -12,7 +12,7 @@ const settingsSections = [
   { name: 'General', component: <General /> },
   { name: 'Appearance', component: <Appearance /> },
   { name: 'Extensions', component: <Extensions /> },
-  { name: 'Commands', component: <DataControls /> },
+  { name: 'Overrides', component: <Overrides /> },
   { name: 'Connected apps', component: <ConnectedApps /> },
 ];
 
